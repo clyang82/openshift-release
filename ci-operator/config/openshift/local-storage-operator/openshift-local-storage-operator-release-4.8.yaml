@@ -36,9 +36,9 @@ images:
 - dockerfile_path: Dockerfile.rhel7
   from: base
   inputs:
-    ocp_builder_rhel-8-golang-1.15-openshift-4.7:
+    ocp_builder_rhel-8-golang-1.15-openshift-4.8:
       as:
-      - registry.ci.openshift.org/ocp/builder:rhel-8-golang-1.15-openshift-4.7
+      - registry.ci.openshift.org/ocp/builder:rhel-8-golang-1.15-openshift-4.8
   to: local-storage-operator
 - dockerfile_path: Dockerfile.diskmaker.rhel7
   from: base
@@ -60,13 +60,11 @@ tag_specification:
   name: "4.8"
   namespace: ocp
 tests:
-- artifact_dir: /tmp/artifacts
-  as: unit
+- as: unit
   commands: make test
   container:
     from: src
-- artifact_dir: /tmp/artifacts
-  as: e2e-operator
+- as: e2e-operator
   steps:
     cluster_profile: aws
     test:

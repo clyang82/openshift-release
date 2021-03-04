@@ -1,6 +1,6 @@
 periodics:
 - agent: kubernetes
-  cluster: api.ci
+  cluster: build02
   cron: '* */8 * * *'
   decorate: true
   decoration_config:
@@ -15,7 +15,6 @@ periodics:
   spec:
     containers:
     - args:
-      - --artifact-dir=$(ARTIFACTS)
       - --give-pr-author-access-to-namespace=true
       - --image-import-pull-secret=/etc/pull-secret/.dockerconfigjson
       - --repo=cnf-features-deploy

@@ -1,6 +1,6 @@
 periodics:
 - agent: kubernetes
-  cluster: api.ci
+  cluster: build01
   cron: '@yearly'
   decorate: true
   labels:
@@ -10,7 +10,6 @@ periodics:
   spec:
     containers:
     - args:
-      - --artifact-dir=$(ARTIFACTS)
       - --give-pr-author-access-to-namespace=true
       - --image-import-pull-secret=/etc/pull-secret/.dockerconfigjson
       - --input-hash=$(BUILD_ID)
@@ -74,7 +73,6 @@ periodics:
   spec:
     containers:
     - args:
-      - --artifact-dir=$(ARTIFACTS)
       - --branch=cvp-ocp-$(OCP_VERSION)
       - --image-import-pull-secret=/etc/pull-secret/.dockerconfigjson
       - --org=redhat-operator-ecosystem
@@ -130,18 +128,16 @@ periodics:
         name: step-registry
       name: registry
 - agent: kubernetes
-  cluster: api.ci
+  cluster: build01
   cron: '@yearly'
   decorate: true
   labels:
-    job-env: osd-aws
-    job-release: "4.1"
+    job-env: osd
     job-type: launch
   name: release-openshift-origin-installer-launch-osd-ephemeral
   spec:
     containers:
     - args:
-      - --artifact-dir=$(ARTIFACTS)
       - --give-pr-author-access-to-namespace=true
       - --image-import-pull-secret=/etc/pull-secret/.dockerconfigjson
       - --input-hash=$(BUILD_ID)
@@ -192,8 +188,7 @@ periodics:
             name: "$(BRANCH)"
             namespace: ocp
           tests:
-          - artifact_dir: /tmp/artifacts
-            as: launch
+          - as: launch
             steps:
               cluster_profile: osd-ephemeral
               env:
@@ -210,8 +205,7 @@ periodics:
                 commands: cp /tmp/secret/kubeconfig /tmp/admin.kubeconfig; sleep $(CLUSTER_DURATION) & wait
                 from: cli
                 resources: { requests: { cpu: 100m, memory: 100Mi } }
-          - artifact_dir: /tmp/artifacts
-            as: e2e
+          - as: e2e
             steps:
               cluster_profile: osd-ephemeral
               env:
@@ -266,18 +260,16 @@ periodics:
       secret:
         secretName: ci-pull-credentials
 - agent: kubernetes
-  cluster: api.ci
+  cluster: build01
   cron: '@yearly'
   decorate: true
   labels:
     job-env: aws
-    job-release: "4.1"
     job-type: launch
   name: release-openshift-origin-installer-launch-aws
   spec:
     containers:
     - args:
-      - --artifact-dir=$(ARTIFACTS)
       - --give-pr-author-access-to-namespace=true
       - --image-import-pull-secret=/etc/pull-secret/.dockerconfigjson
       - --input-hash=$(BUILD_ID)
@@ -425,18 +417,16 @@ periodics:
       secret:
         secretName: ci-pull-credentials
 - agent: kubernetes
-  cluster: api.ci
+  cluster: build01
   cron: '@yearly'
   decorate: true
   labels:
     job-env: azure
-    job-release: "4.2"
     job-type: launch
   name: release-openshift-origin-installer-launch-azure
   spec:
     containers:
     - args:
-      - --artifact-dir=$(ARTIFACTS)
       - --give-pr-author-access-to-namespace=true
       - --image-import-pull-secret=/etc/pull-secret/.dockerconfigjson
       - --input-hash=$(BUILD_ID)
@@ -586,18 +576,16 @@ periodics:
       secret:
         secretName: ci-pull-credentials
 - agent: kubernetes
-  cluster: api.ci
+  cluster: build01
   cron: '@yearly'
   decorate: true
   labels:
     job-env: gcp
-    job-release: "4.2"
     job-type: launch
   name: release-openshift-origin-installer-launch-gcp
   spec:
     containers:
     - args:
-      - --artifact-dir=$(ARTIFACTS)
       - --give-pr-author-access-to-namespace=true
       - --image-import-pull-secret=/etc/pull-secret/.dockerconfigjson
       - --input-hash=$(BUILD_ID)
@@ -745,18 +733,16 @@ periodics:
       secret:
         secretName: ci-pull-credentials
 - agent: kubernetes
-  cluster: api.ci
+  cluster: build01
   cron: '@yearly'
   decorate: true
   labels:
     job-env: metal
-    job-release: "4.2"
     job-type: launch
   name: release-openshift-origin-installer-launch-metal
   spec:
     containers:
     - args:
-      - --artifact-dir=$(ARTIFACTS)
       - --give-pr-author-access-to-namespace=true
       - --image-import-pull-secret=/etc/pull-secret/.dockerconfigjson
       - --input-hash=$(BUILD_ID)
@@ -908,13 +894,11 @@ periodics:
   decorate: true
   labels:
     job-env: vsphere
-    job-release: "4.2"
     job-type: launch
   name: release-openshift-origin-installer-launch-vsphere
   spec:
     containers:
     - args:
-      - --artifact-dir=$(ARTIFACTS)
       - --give-pr-author-access-to-namespace=true
       - --image-import-pull-secret=/etc/pull-secret/.dockerconfigjson
       - --input-hash=$(BUILD_ID)
@@ -1007,8 +991,7 @@ periodics:
             steps:
               cluster_profile: $(CLUSTER_TYPE)
               test:
-              - artifact_dir: /tmp/artifacts
-                as: e2e-test
+              - as: e2e-test
                 commands: sleep $(CLUSTER_DURATION) & wait
                 from_image:
                   namespace: origin
@@ -1070,7 +1053,7 @@ periodics:
       secret:
         secretName: ci-pull-credentials
 - agent: kubernetes
-  cluster: api.ci
+  cluster: build01
   cron: '@yearly'
   decorate: true
   labels:
@@ -1082,7 +1065,6 @@ periodics:
   spec:
     containers:
     - args:
-      - --artifact-dir=$(ARTIFACTS)
       - --give-pr-author-access-to-namespace=true
       - --image-import-pull-secret=/etc/pull-secret/.dockerconfigjson
       - --input-hash=$(BUILD_ID)
@@ -1172,7 +1154,7 @@ periodics:
       secret:
         secretName: ci-pull-credentials
 - agent: kubernetes
-  cluster: api.ci
+  cluster: build01
   cron: '@yearly'
   decorate: true
   labels:
@@ -1184,7 +1166,6 @@ periodics:
   spec:
     containers:
     - args:
-      - --artifact-dir=$(ARTIFACTS)
       - --give-pr-author-access-to-namespace=true
       - --image-import-pull-secret=/etc/pull-secret/.dockerconfigjson
       - --input-hash=$(BUILD_ID)
@@ -1274,7 +1255,7 @@ periodics:
       secret:
         secretName: ci-pull-credentials
 - agent: kubernetes
-  cluster: api.ci
+  cluster: build01
   cron: '@yearly'
   decorate: true
   labels:
@@ -1285,7 +1266,6 @@ periodics:
   spec:
     containers:
     - args:
-      - --artifact-dir=$(ARTIFACTS)
       - --give-pr-author-access-to-namespace=true
       - --image-import-pull-secret=/etc/pull-secret/.dockerconfigjson
       - --input-hash=$(BUILD_ID)
@@ -1363,7 +1343,7 @@ periodics:
       secret:
         secretName: ci-pull-credentials
 - agent: kubernetes
-  cluster: api.ci
+  cluster: build01
   cron: '@yearly'
   decorate: true
   labels:
@@ -1374,7 +1354,6 @@ periodics:
   spec:
     containers:
     - args:
-      - --artifact-dir=$(ARTIFACTS)
       - --give-pr-author-access-to-namespace=true
       - --image-import-pull-secret=/etc/pull-secret/.dockerconfigjson
       - --input-hash=$(BUILD_ID)

@@ -1,0 +1,21 @@
+build_root:
+  project_image:
+    context_dir: .
+    dockerfile_path: base.Dockerfile
+resources:
+  '*':
+    requests:
+      cpu: 100m
+      memory: 200Mi
+tag_specification:
+  name: "4.8"
+  namespace: ocp
+tests:
+- as: unit
+  commands: ls /usr/local/kubebuilder/bin
+  container:
+    from: src
+zz_generated_metadata:
+  branch: master
+  org: openshift
+  repo: operator-framework-olm
